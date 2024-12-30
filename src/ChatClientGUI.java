@@ -1,7 +1,6 @@
 // Importamos las clases necesarias para el GUI y el manejo de eventos
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -13,7 +12,7 @@ public class ChatClientGUI extends JFrame {
     private ChatClient client;
 
     public ChatClientGUI() {
-        super("Aplicación de Chat");
+        super("JavaChat");
         setSize(400, 500);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -35,7 +34,7 @@ public class ChatClientGUI extends JFrame {
         // Pedimos al usuario que ingrese su nombre
         String name = JOptionPane.showInputDialog(this, "Ingresa tu nombre:", "Entrada de Nombre",
                 JOptionPane.PLAIN_MESSAGE);
-        this.setTitle("Chat - " + name);
+        this.setTitle("JavaChat - " + name);
 
         // Configuración del campo de texto para nuevos mensajes
         textField = new JTextField();

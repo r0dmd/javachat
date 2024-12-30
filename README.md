@@ -1,6 +1,6 @@
-# Chat Application
+# JavaChat
 
-Este es un proyecto de aplicación de chat básica utilizando Java y Swing para la interfaz gráfica. Permite a múltiples usuarios conectarse a un servidor y enviarse mensajes en tiempo real. El servidor maneja las conexiones de los clientes, mientras que los clientes envían y reciben mensajes a través de una interfaz gráfica moderna y sencilla.
+Este es un proyecto de aplicación de chat básica utilizando Java y Swing para la interfaz gráfica, basado en el tutorial de [Robert Johns](https://hackr.io/blog/how-to-build-a-java-chat-app). Permite a múltiples usuarios conectarse a un servidor y enviarse mensajes en tiempo real. El servidor maneja las conexiones de los clientes, mientras que los clientes envían y reciben mensajes a través de una interfaz gráfica moderna y sencilla.
 
 ## Descripción
 
@@ -29,10 +29,10 @@ La aplicación consta de tres partes principales:
 
 Si no tienes el proyecto localmente, puedes clonarlo desde GitHub:
 
-``````
+```
 git clone <URL_DEL_REPOSITORIO>
 cd chat-application
-``````
+```
 
 ### 2. Compilar y ejecutar el servidor
 
@@ -40,15 +40,15 @@ Primero, necesitas iniciar el servidor. Este se encarga de escuchar las conexion
 
 Abre una terminal en el directorio del proyecto y compila el servidor:
 
-``````
+```
 javac ChatServer.java
-``````
+```
 
 Luego, ejecuta el servidor:
 
-``````
+```
 java ChatServer
-``````
+```
 
 El servidor se iniciará en el puerto **5000**. Asegúrate de que este puerto esté disponible en tu máquina.
 
@@ -56,15 +56,15 @@ El servidor se iniciará en el puerto **5000**. Asegúrate de que este puerto es
 
 Para el cliente, primero compila el código:
 
-``````
+```
 javac ChatClient.java ChatClientGUI.java
-``````
+```
 
 Después, ejecuta el cliente en una nueva terminal:
 
-``````
+```
 java ChatClientGUI
-``````
+```
 
 El cliente te pedirá que ingreses un nombre. Una vez lo ingreses, la ventana del chat aparecerá y podrás comenzar a enviar mensajes.
 
