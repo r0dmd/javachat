@@ -1,59 +1,95 @@
+// Importamos las clases necesarias para el GUI y el manejo de eventos
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ChatClientGUI extends JFrame {
     private JTextArea messageArea; // Área de texto para mostrar mensajes
-    private JTextField textField; // Campo de texto para escribir mensajes
-    private ChatClient client; // Cliente que gestiona la conexión al servidor
+    private JTextField textField; // Campo para escribir nuevos mensajes
+    private JButton exitButton; // Botón de salir
+    private ChatClient client;
 
     public ChatClientGUI() {
-        super("Chat Application");
-        setSize(400, 500); // Dimensiones de la ventana
-        setDefaultCloseOperation(EXIT_ON_CLOSE); // Cerrar la aplicación al cerrar la ventana
+        super("Aplicación de Chat");
+        setSize(400, 500);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        // Área de texto no editable para mostrar mensajes
+        // Variables de estilo
+        Color backgroundColor = new Color(240, 240, 240);
+        Color buttonColor = new Color(75, 75, 75);
+        Color textColor = new Color(50, 50, 50);
+        Font textFont = new Font("Arial", Font.PLAIN, 14);
+        Font buttonFont = new Font("Arial", Font.BOLD, 12);
+
+        // Configuración del área de mensajes
         messageArea = new JTextArea();
         messageArea.setEditable(false);
+        messageArea.setBackground(backgroundColor);
+        messageArea.setForeground(textColor);
+        messageArea.setFont(textFont);
         add(new JScrollPane(messageArea), BorderLayout.CENTER);
 
-        // Campo de texto para escribir mensajes
-        textField = new JTextField();
-        textField.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // Validación: evitar mensajes vacíos
-                String message = textField.getText().trim();
-                if (!message.isEmpty()) {
-                    client.sendMessage(message); // Enviar mensaje al servidor
-                    textField.setText(""); // Limpiar campo de texto
-                }
-            }
-        });
-        add(textField, BorderLayout.SOUTH);
+        // Pedimos al usuario que ingrese su nombre
+        String name = JOptionPane.showInputDialog(this, "Ingresa tu nombre:", "Entrada de Nombre",
+                JOptionPane.PLAIN_MESSAGE);
+        this.setTitle("Chat - " + name);
 
-        // Inicializar y arrancar el cliente de chat
+        // Configuración del campo de texto para nuevos mensajes
+        textField = new JTextField();
+        textField.setFont(textFont);
+        textField.setForeground(textColor);
+        textField.setBackground(backgroundColor);
+        textField.addActionListener(e -> {
+            String message = "[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "] " + name + ": "
+                    + textField.getText();
+            client.sendMessage(message);
+            textField.setText(""); // Limpiamos el campo de texto
+        });
+
+        // Configuración del botón de salir
+        exitButton = new JButton("Salir");
+        exitButton.setFont(buttonFont);
+        exitButton.setBackground(buttonColor);
+        exitButton.setForeground(Color.WHITE);
+        exitButton.addActionListener(e -> {
+            String departureMessage = name + " ha salido del chat.";
+            client.sendMessage(departureMessage);
+            try {
+                Thread.sleep(1000); // Esperamos un segundo para enviar el mensaje
+            } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+            }
+            System.exit(0);
+        });
+
+        // Panel inferior con el campo de texto y el botón de salir
+        JPanel bottomPanel = new JPanel(new BorderLayout());
+        bottomPanel.setBackground(backgroundColor);
+        bottomPanel.add(textField, BorderLayout.CENTER);
+        bottomPanel.add(exitButton, BorderLayout.EAST);
+        add(bottomPanel, BorderLayout.SOUTH);
+
+        // Inicializamos y conectamos el cliente
         try {
-            this.client = new ChatClient("127.0.0.1", 5000, this::onMessageReceived); // Cliente conectado al servidor
-            client.startClient(); // Inicia la conexión al servidor
+            this.client = new ChatClient("127.0.0.1", 5000, this::onMessageReceived);
+            client.startClient();
         } catch (IOException e) {
-            e.printStackTrace(); // Mostrar detalles del error en la consola
-            // Mostrar mensaje de error al usuario
-            JOptionPane.showMessageDialog(this, "Error connecting to the server", "Connection error",
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al conectar con el servidor", "Error de conexión",
                     JOptionPane.ERROR_MESSAGE);
-            System.exit(1); // Salir de la aplicación si no se puede conectar
+            System.exit(1);
         }
     }
 
-    // Método que maneja los mensajes recibidos del servidor
+    // Método para manejar mensajes recibidos
     private void onMessageReceived(String message) {
-        SwingUtilities.invokeLater(() -> messageArea.append(message + "\n")); // Agregar mensaje al área de texto
+        SwingUtilities.invokeLater(() -> messageArea.append(message + "\n"));
     }
 
-    // Método principal para ejecutar la aplicación
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new ChatClientGUI().setVisible(true); // Crear y mostrar la ventana
-        });
+        SwingUtilities.invokeLater(() -> new ChatClientGUI().setVisible(true));
     }
 }
